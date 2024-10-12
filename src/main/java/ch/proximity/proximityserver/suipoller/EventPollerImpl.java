@@ -18,6 +18,14 @@ public class EventPollerImpl implements EventPoller, Runnable {
     private final List<Consumer<List<ProximityEdge>>> edgeConsumers = new LinkedList<>();
     private final Thread thread = new Thread(this);
     private boolean started = false;
+    private final static String PACKAGE = "0xfd9a3688cf778f10b455d89cf5b60d00ac698722843f69460468c8b64eecbc31";
+    private final static String MODULE = "proximity";
+    private final static String NEW_EDGES_EVENT = "NodeUpdateEvent";
+    private final static String NEW_NODE_EVENT = "NewUserEvent";
+    private MiniSUIJavaSDK.PagingCursor currentEdgePage = null;
+    private MiniSUIJavaSDK.PagingCursor currentNodePage = null;
+    private final MiniSUIJavaSDK sui = new MiniSUIJavaSDK();
+    private final static int MAX_ITEMS = 1000;
 
     @Override
     public void registerOnNewNodes(Consumer<List<ProximityNode>> nodeConsummer) {
@@ -53,6 +61,13 @@ public class EventPollerImpl implements EventPoller, Runnable {
                 }).toList();
     }
 
+    private List<ProximityEdge> convertToEdges(List<JsonElement> elems){
+        List<ProximityEdge> edges = new ArrayList<>();
+        for(JsonElement e : elems){
+            edges.addAll(convertNodeUpdateToEdges(e));
+        }
+        return edges;
+    }
 
 
     private List<ProximityEdge> convertNodeUpdateToEdges(JsonElement elem){
@@ -67,6 +82,19 @@ public class EventPollerImpl implements EventPoller, Runnable {
             edges.add(new ProximityEdge(timestamp, userID, destID));
         }
         return edges;
+    }
+
+    private List<ProximityEdge> fetchNewEdges(){
+        return convertToEdges(
+                sui.queryEvents(
+                        PACKAGE,
+                        MODULE,
+                        NEW_EDGES_EVENT,
+                        currentEdgePage,
+
+
+                )
+        )
     }
 
 
