@@ -4,12 +4,7 @@ import ch.proximity.proximityserver.model.ProximityEdge;
 import ch.proximity.proximityserver.model.ProximityNode;
 import org.jgrapht.alg.util.Pair;
 import org.jgrapht.graph.SimpleDirectedGraph;
-import org.jgrapht.traverse.BreadthFirstIterator;
-
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.Semaphore;
 
 /**
@@ -46,18 +41,39 @@ public class FakeDB implements DBReader, DBWriter {
 
         Pair<ProximityNode, Integer> current;
         while(!queue.isEmpty()){
-            current = queue.pop().first;
+            current = queue.pop();
+            if(current.getSecond() > depth){
+                break;
+            }
+
+            Set<ProximityEdge> outgoingEdges = graph.outgoingEdgesOf(current.getFirst());
+
+            if(current.getSecond() == depth){
+                for(ProximityEdge e : outgoingEdges){
+                    if(e.getTimestamp() >= minTimestamp && e.getTimestamp() <= maxTimestamp){
+                        ProximityNode target = graph.getEdgeTarget(e);
+                        if(subGraph.containsVertex(target)){
+                            subGraph.addEdge(current.getFirst(), target, e);
+                        }
+                    }
+                }
+            }else{
+                for(ProximityEdge e : outgoingEdges){
+                    if(e.getTimestamp() >= minTimestamp && e.getTimestamp() <= maxTimestamp){
+                        ProximityNode target = graph.getEdgeTarget(e);
+                        if(!subGraph.containsVertex(target)){
+                            subGraph.addVertex(target);
+                            queue.add(new Pair<>(target, current.getSecond()+1));
+                        }
+                        subGraph.addEdge(current.getFirst(), target, e);
+                    }
+                }
+            }
         }
 
 
-
-
-
-
-
-
         releaseReaderLock(); // :)
-        return graph;
+        return subGraph;
     }
 
     private ProximityNode nodeFromUUID(String uid){
@@ -110,6 +126,10 @@ public class FakeDB implements DBReader, DBWriter {
         });
         releaseWriterLock();
 
+    }
+
+    private SimpleDirectedGraph<ProximityNode, ProximityEdge> fakeInstance(){
+        return null;
     }
 
 }
