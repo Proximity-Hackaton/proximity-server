@@ -23,5 +23,11 @@ public class ProximityEdge extends DefaultEdge {
         return nodeDestUUID;
     }
 
+    public long getTimestamp() {
+        return timestamp;
+    }
 
+    public String getEdgeUUID() {
+        return edgeUUID;
+    }
 }
