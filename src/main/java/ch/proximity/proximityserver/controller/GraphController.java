@@ -5,9 +5,11 @@ import ch.proximity.proximityserver.model.ProximityEdge;
 import ch.proximity.proximityserver.model.ProximityGraph;
 import ch.proximity.proximityserver.model.ProximityNode;
 import org.jgrapht.graph.SimpleDirectedGraph;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.Iterator;
 
@@ -50,6 +52,8 @@ public class GraphController {
 
         SimpleDirectedGraph<ProximityNode, ProximityEdge> graph =
                 (fake ? FakeDB.fakeInstance() : FakeDB.getInstance()).BFS_n_read(source, depth, minTimeStamp, maxTimeStamp);
+
+        if(graph == null) throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Source node not found");
 
         int edgesSetSize = graph.edgeSet().size();
         int nodesSetSize = graph.vertexSet().size();
