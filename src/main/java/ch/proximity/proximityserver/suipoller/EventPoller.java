@@ -12,7 +12,6 @@ public interface EventPoller {
     void registerOnNewEdges(Consumer<List<ProximityEdge>> edgeConsummer);
     void start();
     void stop();
-    void pause();
 }
 
 
