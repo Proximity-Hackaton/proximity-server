@@ -1,16 +1,21 @@
-package ch.proximity.database;
+package ch.proximity.proximityserver.database;
 
-import ch.proximity.model.ProximityEdge;
-import ch.proximity.model.ProximityNode;
+import ch.proximity.proximityserver.model.ProximityEdge;
+import ch.proximity.proximityserver.model.ProximityNode;
+import org.jgrapht.alg.util.Pair;
 import org.jgrapht.graph.SimpleDirectedGraph;
 import org.jgrapht.traverse.BreadthFirstIterator;
 
 import java.util.HashMap;
-import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Semaphore;
 
+/**
+ * DISCLAIMER : This is a mock implementation of a GraphDB, this is not supposed to run in production (obviously)
+ * Please don't pay attention to the lack of efficiency of the methods in this class
+ */
 public class FakeDB implements DBReader, DBWriter {
     private final static int MAX_READERS = 10;
     private final Semaphore readSemaphore = new Semaphore(MAX_READERS);
@@ -23,27 +28,31 @@ public class FakeDB implements DBReader, DBWriter {
         this.graph = new SimpleDirectedGraph<>(ProximityEdge.class);
     }
 
+    /**
+     * WARNING : THIS CODE SHOULD EXECUTE ON A GRAPH DATABASE
+     * The implementation below is a Mock Implementation for proof of concept and is therefore not optimized
+     * The state of the database is stored and queried in the RAM
+     * ONLY VALID FOR PROOF OF CONCEPT. Not a real implementation.
+     */
     @Override
     public SimpleDirectedGraph<ProximityNode, ProximityEdge> BFS_n_read(String uid, int depth, long minTimestamp, long maxTimestamp) {
+
         acquireReaderLock();
-        ProximityNode source = nodeFromUUID(uid);
-        BreadthFirstIterator<ProximityNode, ProximityEdge> iterator =
-                new BreadthFirstIterator<>(graph, source);
-
-
         SimpleDirectedGraph<ProximityNode, ProximityEdge> subGraph = new SimpleDirectedGraph<>(ProximityEdge.class);
-        subGraph.addVertex(source);
+        ProximityNode source = nodeFromUUID(uid);
 
-        ProximityNode currentNode = source;
-        boolean done = false;
-        while(iterator.hasNext() && !done){
-            currentNode = iterator.next();
-            if(iterator.getDepth(currentNode) > depth){
-                done = true;
-            }else{
-                subGraph.addVertex(currentNode);
-            }
+        LinkedList<Pair<ProximityNode, Integer>> queue = new LinkedList<>();
+        queue.add(new Pair<>(source, 0));
+
+        Pair<ProximityNode, Integer> current;
+        while(!queue.isEmpty()){
+            current = queue.pop().first;
         }
+
+
+
+
+
 
 
 

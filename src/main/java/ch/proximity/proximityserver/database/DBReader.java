@@ -1,8 +1,7 @@
-package ch.proximity.database;
+package ch.proximity.proximityserver.database;
 
-import ch.proximity.model.ProximityEdge;
-import ch.proximity.model.ProximityNode;
-import org.jgrapht.graph.DefaultEdge;
+import ch.proximity.proximityserver.model.ProximityEdge;
+import ch.proximity.proximityserver.model.ProximityNode;
 import org.jgrapht.graph.SimpleDirectedGraph;
 
 public interface DBReader {
