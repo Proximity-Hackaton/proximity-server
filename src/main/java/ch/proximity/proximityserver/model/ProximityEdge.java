@@ -8,7 +8,7 @@ public class ProximityEdge extends DefaultEdge {
     private final String nodeSourceUUID;
     private final String nodeDestUUID;
 
-    public ProximityEdge(String UUID, long timestamp, String edgeUUID, String nodeSourceUUID, String nodeDestUUID) {
+    public ProximityEdge(String UUID, long timestamp, String nodeSourceUUID, String nodeDestUUID) {
         super();
         this.timestamp = timestamp;
         this.edgeUUID = UUID;
