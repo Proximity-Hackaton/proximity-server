@@ -1,4 +1,4 @@
-package ch.muchembled.martin.proximityserver;
+package ch.proximity.proximityserver;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

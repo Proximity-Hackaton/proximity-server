@@ -1,4 +1,4 @@
-package ch.muchembled.martin.proximityserver;
+package ch.proximity.proximityserver;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
