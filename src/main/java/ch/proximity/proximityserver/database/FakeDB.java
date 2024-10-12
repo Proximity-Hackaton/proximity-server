@@ -41,6 +41,7 @@ public class FakeDB implements DBReader, DBWriter {
         acquireReaderLock();
         SimpleDirectedGraph<ProximityNode, ProximityEdge> subGraph = new SimpleDirectedGraph<>(ProximityEdge.class);
         ProximityNode source = nodeFromUUID(uid);
+        if(source == null) return null;
 
         LinkedList<Pair<ProximityNode, Integer>> queue = new LinkedList<>();
         queue.add(new Pair<>(source, 0));
