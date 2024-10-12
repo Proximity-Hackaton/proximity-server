@@ -1,4 +1,4 @@
-package ch.proximity.model;
+package ch.proximity.proximityserver.model;
 
 public class ProximityNode {
     private final String nodeUUID;

@@ -1,4 +1,4 @@
-package ch.proximity.model;
+package ch.proximity.proximityserver.model;
 
 import org.jgrapht.graph.DefaultEdge;
 
