@@ -1,10 +1,13 @@
 package ch.proximity.proximityserver.controller;
 
 import ch.proximity.proximityserver.database.FakeDB;
+import ch.proximity.proximityserver.explorer.TrustFunction;
+import ch.proximity.proximityserver.explorer.TrustTransferNumberFunction;
 import ch.proximity.proximityserver.model.ProximityEdge;
 import ch.proximity.proximityserver.model.ProximityGraph;
 import ch.proximity.proximityserver.model.ProximityNode;
 import jakarta.servlet.http.HttpServletResponse;
+import org.jgrapht.Graph;
 import org.jgrapht.graph.SimpleDirectedGraph;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -16,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.Iterator;
+import java.util.List;
 
 @RestController
 public class GraphController {
@@ -39,8 +43,26 @@ public class GraphController {
             @RequestParam(value = "minTimeStamp", defaultValue = "-1") Long minTimeStamp,
             @RequestParam(value = "maxTimeStamp", defaultValue = "-1") Long maxTimeStamp
     ){
-        
-        return rawNeighborhood(source, depth, minTimeStamp, maxTimeStamp, false);
+        if(minTimeStamp == -1){
+            minTimeStamp = System.currentTimeMillis() - 300000;
+        }
+        if(maxTimeStamp == -1){
+            maxTimeStamp = System.currentTimeMillis();
+        }
+
+        SimpleDirectedGraph<ProximityNode, ProximityEdge> graph =
+                (FakeDB.getInstance()).BFS_n_read(source, depth, minTimeStamp, maxTimeStamp);
+        if(graph == null) throw new ResponseStatusException(HttpStatus.I_AM_A_TEAPOT, "Source node not found");
+        TrustFunction function = new TrustTransferNumberFunction();
+        function.applyFunction(
+                graph,
+                List.of(FakeDB.getInstance().walletToNodeConvert(source)),
+                3
+                );
+        int edgesSetSize = graph.edgeSet().size();
+        int nodesSetSize = graph.vertexSet().size();
+
+        return new ProximityGraph(graph.edgeSet().toArray(new ProximityEdge[edgesSetSize]), graph.vertexSet().toArray(new ProximityNode[nodesSetSize]));
     }
 
     @GetMapping("/fakeRawNeighborhood")
