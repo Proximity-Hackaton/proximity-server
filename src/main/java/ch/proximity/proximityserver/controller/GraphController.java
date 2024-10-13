@@ -4,8 +4,12 @@ import ch.proximity.proximityserver.database.FakeDB;
 import ch.proximity.proximityserver.model.ProximityEdge;
 import ch.proximity.proximityserver.model.ProximityGraph;
 import ch.proximity.proximityserver.model.ProximityNode;
+import jakarta.servlet.http.HttpServletResponse;
 import org.jgrapht.graph.SimpleDirectedGraph;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -27,12 +31,14 @@ public class GraphController {
     }
 
     @GetMapping("/fakeRawNeighborhood")
+    @CrossOrigin(origins = "*")
     public ProximityGraph getRawNodeNeighborhoodFake(
             @RequestParam(required = true, value = "source") String source,
             @RequestParam(value = "depth", defaultValue = "1") Integer depth,
             @RequestParam(value = "minTimeStamp", defaultValue = "-1") Long minTimeStamp,
             @RequestParam(value = "maxTimeStamp", defaultValue = "-1") Long maxTimeStamp
     ){
+
         return rawNeighborhood(source, depth, minTimeStamp, maxTimeStamp, true);
     }
 
