@@ -31,6 +31,18 @@ public class GraphController {
         return rawNeighborhood(source, depth, minTimeStamp, maxTimeStamp, false);
     }
 
+    @GetMapping("/trustedNeighborhood")
+    @CrossOrigin(origins = "*")
+    public ProximityGraph getTrustedNodeNeighborhood(
+            @RequestParam(required = true, value = "source") String source,
+            @RequestParam(value = "depth", defaultValue = "1") Integer depth,
+            @RequestParam(value = "minTimeStamp", defaultValue = "-1") Long minTimeStamp,
+            @RequestParam(value = "maxTimeStamp", defaultValue = "-1") Long maxTimeStamp
+    ){
+        
+        return rawNeighborhood(source, depth, minTimeStamp, maxTimeStamp, false);
+    }
+
     @GetMapping("/fakeRawNeighborhood")
     @CrossOrigin(origins = "*")
     public ProximityGraph getRawNodeNeighborhoodFake(
@@ -60,7 +72,7 @@ public class GraphController {
         SimpleDirectedGraph<ProximityNode, ProximityEdge> graph =
                 (fake ? FakeDB.fakeInstance() : FakeDB.getInstance()).BFS_n_read(source, depth, minTimeStamp, maxTimeStamp);
 
-        if(graph == null) throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Source node not found");
+        if(graph == null) throw new ResponseStatusException(HttpStatus.I_AM_A_TEAPOT, "Source node not found");
 
         int edgesSetSize = graph.edgeSet().size();
         int nodesSetSize = graph.vertexSet().size();
