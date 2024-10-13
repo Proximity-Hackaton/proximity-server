@@ -18,7 +18,7 @@ public class FakeDB implements DBReader, DBWriter {
 
     private final SimpleDirectedGraph<ProximityNode, ProximityEdge> graph;
     private final Map<String, ProximityNode> uuidToNode = new HashMap<>();
-
+    private final Map<String, ProximityNode> walletToNode = new HashMap<>();
     private static FakeDB mainInstance;
 
     public FakeDB(){
@@ -36,11 +36,11 @@ public class FakeDB implements DBReader, DBWriter {
      * ONLY VALID FOR PROOF OF CONCEPT. Not a real implementation.
      */
     @Override
-    public SimpleDirectedGraph<ProximityNode, ProximityEdge> BFS_n_read(String uid, int depth, long minTimestamp, long maxTimestamp) {
+    public SimpleDirectedGraph<ProximityNode, ProximityEdge> BFS_n_read(String walletUid, int depth, long minTimestamp, long maxTimestamp) {
 
         acquireReaderLock();
         SimpleDirectedGraph<ProximityNode, ProximityEdge> subGraph = new SimpleDirectedGraph<>(ProximityEdge.class);
-        ProximityNode source = nodeFromUUID(uid);
+        ProximityNode source = walletToNode.get(walletUid);
         if(source == null) return null;
 
         LinkedList<Pair<ProximityNode, Integer>> queue = new LinkedList<>();
@@ -122,11 +122,11 @@ public class FakeDB implements DBReader, DBWriter {
                 uuidToNode.get(e.getNodeSourceUUID()), uuidToNode.get(e.getNodeDestUUID()), e
         ));
         releaseWriterLock();
-        System.out.println("Edge updated");
+        /*System.out.println("Edge updated");
         graph.edgeSet().forEach((e)->{
             System.out.println("src "+e.getNodeDestUUID());
             System.out.println("dest "+ e.getNodeSourceUUID());
-        });
+        });*/
 
 
     }
@@ -136,14 +136,16 @@ public class FakeDB implements DBReader, DBWriter {
         acquireWriterLock();
         nodes.stream().forEach((n) -> {
             uuidToNode.put(n.getNodeUUID(), n);
+            walletToNode.put(n.getOwnerWallet(), n);
             graph.addVertex(n);
         });
         releaseWriterLock();
+        /*
         System.out.println("Nodes updated");
         graph.vertexSet().forEach((e)->{
             System.out.println(e.getNodeUUID());
             System.out.println(e.getOwnerWallet());
-        });
+        });*/
 
     }
 
