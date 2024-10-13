@@ -53,23 +53,8 @@ public class GraphController {
 
         SimpleDirectedGraph<ProximityNode, ProximityEdge> graph =
                 (FakeDB.getInstance()).BFS_n_read(source, depth, minTimeStamp, maxTimeStamp);
-        SimpleDirectedGraph<ProximityNode, ProximityEdge> graphCopy = new SimpleDirectedGraph<>(ProximityEdge.class);
-        graph.vertexSet().forEach((n)->{
-            graphCopy.addVertex(
-                    new ProximityNode(
-                            n.getNodeUUID(), n.getOwnerWallet()
-                    )
-            );
-        });
-        graph.edgeSet().forEach((e)->{
-            graphCopy.addEdge(
-                    graph.getEdgeSource(e),
-                    graph.getEdgeTarget(e),
-                    new ProximityEdge(
-                            e.getTimestamp(), e.getNodeSourceUUID(), e.getNodeDestUUID()
-                    )
-            );
-        });
+
+
         if(graph == null) throw new ResponseStatusException(HttpStatus.I_AM_A_TEAPOT, "Source node not found");
         TrustFunction function = new TrustTransferNumberFunction();
         function.applyFunction(

@@ -82,7 +82,7 @@ public class FakeDB implements DBReader, DBWriter {
 
 
         releaseReaderLock(); // :)
-        return subGraph;
+        return deepCopyGraph(subGraph);
     }
 
     private ProximityNode nodeFromUUID(String uid){
