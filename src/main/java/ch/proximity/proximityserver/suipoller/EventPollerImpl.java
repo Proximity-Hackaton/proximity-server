@@ -18,7 +18,7 @@ public class EventPollerImpl implements EventPoller, Runnable {
     private final List<Consumer<List<ProximityEdge>>> edgeConsumers = new LinkedList<>();
     private final Thread thread = new Thread(this);
     private boolean started = false;
-    private final static String PACKAGE = "0x51cfe6a0bbfb6e3ac8475db0e0259799ade960dba9363bab1e961b4b91f5e8d3";
+    private final static String PACKAGE = "0xb102cd2faac024fcf00b65e2c838a69d7c8cda0ccb4ddd71ae19b63b2d44d908";
     private final static String MODULE = "proximity";
     private final static String NEW_EDGES_EVENT = "NodeUpdateEvent";
     private final static String NEW_NODE_EVENT = "NewUserEvent";

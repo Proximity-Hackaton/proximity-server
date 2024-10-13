@@ -17,7 +17,6 @@ public class ProximityServerApplication {
         eventPoller.registerOnNewEdges((es) -> db.addEdges(es));
         eventPoller.start();
         SpringApplication.run(ProximityServerApplication.class, args);
-        eventPoller.stop();
     }
 
 }
