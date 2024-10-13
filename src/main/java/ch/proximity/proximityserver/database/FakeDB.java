@@ -87,6 +87,9 @@ public class FakeDB implements DBReader, DBWriter {
     private ProximityNode nodeFromUUID(String uid){
         return uuidToNode.get(uid);
     }
+    public ProximityNode walletToNodeConvert(String wallet){
+        return walletToNode.get(wallet);
+    }
 
     private void acquireWriterLock(){
         try {
@@ -122,11 +125,11 @@ public class FakeDB implements DBReader, DBWriter {
                 uuidToNode.get(e.getNodeSourceUUID()), uuidToNode.get(e.getNodeDestUUID()), e
         ));
         releaseWriterLock();
-        /*System.out.println("Edge updated");
-        graph.edgeSet().forEach((e)->{
+        System.out.println("Edge updated");
+        edges.forEach((e)->{
             System.out.println("src "+e.getNodeDestUUID());
             System.out.println("dest "+ e.getNodeSourceUUID());
-        });*/
+        });
 
 
     }
@@ -140,12 +143,12 @@ public class FakeDB implements DBReader, DBWriter {
             graph.addVertex(n);
         });
         releaseWriterLock();
-        /*
+
         System.out.println("Nodes updated");
-        graph.vertexSet().forEach((e)->{
+        nodes.forEach((e)->{
             System.out.println(e.getNodeUUID());
             System.out.println(e.getOwnerWallet());
-        });*/
+        });
 
     }
 
