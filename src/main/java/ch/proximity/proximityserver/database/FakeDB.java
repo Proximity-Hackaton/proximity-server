@@ -19,7 +19,7 @@ public class FakeDB implements DBReader, DBWriter {
     private final SimpleDirectedGraph<ProximityNode, ProximityEdge> graph;
     private final Map<String, ProximityNode> uuidToNode = new HashMap<>();
     private final Map<String, ProximityNode> walletToNode = new HashMap<>();
-    private static FakeDB mainInstance;
+    private static FakeDB mainInstance = new FakeDB();
 
     public FakeDB(){
         this.graph = new SimpleDirectedGraph<>(ProximityEdge.class);
