@@ -122,9 +122,15 @@ public class FakeDB implements DBReader, DBWriter {
     @Override
     public void addEdges(List<ProximityEdge> edges){
         acquireWriterLock();
-        edges.stream().forEach((e) -> graph.addEdge(
-                uuidToNode.get(e.getNodeSourceUUID()), uuidToNode.get(e.getNodeDestUUID()), e
-        ));
+
+        edges.stream().forEach((e) -> {
+            if(graph.containsEdge(uuidToNode.get(e.getNodeSourceUUID()), uuidToNode.get(e.getNodeDestUUID()))){
+                graph.removeEdge(uuidToNode.get(e.getNodeSourceUUID()), uuidToNode.get(e.getNodeDestUUID()));
+            }
+            graph.addEdge(
+                    uuidToNode.get(e.getNodeSourceUUID()), uuidToNode.get(e.getNodeDestUUID()), e
+            );
+        });
         releaseWriterLock();
         System.out.println("Edge updated");
         edges.forEach((e)->{
