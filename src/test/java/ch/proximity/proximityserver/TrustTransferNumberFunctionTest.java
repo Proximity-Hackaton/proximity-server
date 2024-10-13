@@ -19,7 +19,7 @@ public class TrustTransferNumberFunctionTest {
         TrustTransferNumberFunction func = new TrustTransferNumberFunction();
         func.applyFunction(
                 graph,
-                List.of(db.walletToNodeConvert("a14a")),
+                List.of("a14a"),
                 2
         );
 

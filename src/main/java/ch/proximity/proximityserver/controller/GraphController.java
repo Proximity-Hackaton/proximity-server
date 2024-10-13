@@ -59,7 +59,7 @@ public class GraphController {
         TrustFunction function = new TrustTransferNumberFunction();
         function.applyFunction(
                 graph,
-                List.of(FakeDB.getInstance().walletToNodeConvert(source)),
+                List.of(source),
                 3
                 );
         int edgesSetSize = graph.edgeSet().size();

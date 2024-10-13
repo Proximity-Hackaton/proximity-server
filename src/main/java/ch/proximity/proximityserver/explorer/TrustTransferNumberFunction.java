@@ -79,9 +79,13 @@ public class TrustTransferNumberFunction implements TrustFunction{
     }
 
     @Override
-    public void applyFunction(Graph<ProximityNode, ProximityEdge> graph, List<ProximityNode> trustees, int k) {
+    public void applyFunction(Graph<ProximityNode, ProximityEdge> graph, List<String> trustees, int k) {
         SimpleGraph<ProximityNode, ProximityEdge> uGraph = validateBidirection(graph);
-        ProximityNode origin= attachOrigin(uGraph, trustees);
+        List<ProximityNode> trusteesNodes = uGraph.vertexSet().stream().filter((n) ->{
+            return trustees.contains(n.getOwnerWallet());
+        }).toList();
+
+        ProximityNode origin= attachOrigin(uGraph, trusteesNodes);
         Map<ProximityNode, Integer> edgeDeletedCount = new HashMap<>();
         boolean hasNext = certifyLevel(
                 uGraph,
