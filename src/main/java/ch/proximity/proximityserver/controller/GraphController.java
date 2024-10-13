@@ -21,6 +21,7 @@ import java.util.Iterator;
 public class GraphController {
 
     @GetMapping("/rawNeighborhood")
+    @CrossOrigin(origins = "*")
     public ProximityGraph getRawNodeNeighborhood(
             @RequestParam(required = true, value = "source") String source,
             @RequestParam(value = "depth", defaultValue = "1") Integer depth,
