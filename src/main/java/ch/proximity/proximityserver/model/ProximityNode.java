@@ -26,6 +26,9 @@ public class ProximityNode {
     public double getTrust() {
         return trust;
     }
+    public void setTrust(){
+
+    }
 
 
 }
