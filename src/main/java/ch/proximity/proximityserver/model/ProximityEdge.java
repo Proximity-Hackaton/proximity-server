@@ -24,8 +24,4 @@ public class ProximityEdge extends DefaultEdge {
     public long getTimestamp() {
         return timestamp;
     }
-    public ProximityEdge copy(){
-        return new ProximityEdge(timestamp, nodeSourceUUID, nodeDestUUID);
-    }
-
 }

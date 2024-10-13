@@ -2,6 +2,7 @@ package ch.proximity.proximityserver.database;
 
 import ch.proximity.proximityserver.model.ProximityEdge;
 import ch.proximity.proximityserver.model.ProximityNode;
+import org.jgrapht.Graph;
 import org.jgrapht.alg.util.Pair;
 import org.jgrapht.graph.SimpleDirectedGraph;
 import java.util.*;
@@ -150,6 +151,27 @@ public class FakeDB implements DBReader, DBWriter {
             System.out.println(e.getOwnerWallet());
         });
 
+    }
+
+    private SimpleDirectedGraph<ProximityNode, ProximityEdge> deepCopyGraph(SimpleDirectedGraph<ProximityNode, ProximityEdge> graph){
+        HashMap<ProximityNode, ProximityNode> refs = new HashMap<>();
+        SimpleDirectedGraph<ProximityNode,ProximityEdge> copyGraph = new SimpleDirectedGraph<>(ProximityEdge.class);
+        graph.vertexSet().forEach((n)->{
+            ProximityNode newNode = new ProximityNode(n.getNodeUUID(), n.getOwnerWallet());
+            refs.put(n, newNode);
+            copyGraph.addVertex(newNode);
+        });
+        graph.edgeSet().forEach((e)->{
+            ProximityEdge copyEdge = new ProximityEdge(
+                    e.getTimestamp(), e.getNodeSourceUUID(), e.getNodeDestUUID()
+            );
+            copyGraph.addEdge(
+                    refs.get(graph.getEdgeSource(e)),
+                    refs.get(graph.getEdgeTarget(e)),
+                    copyEdge
+            );
+        });
+        return copyGraph;
     }
 
     public static FakeDB getInstance(){
