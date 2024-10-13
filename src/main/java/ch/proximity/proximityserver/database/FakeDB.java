@@ -122,6 +122,13 @@ public class FakeDB implements DBReader, DBWriter {
                 uuidToNode.get(e.getNodeSourceUUID()), uuidToNode.get(e.getNodeDestUUID()), e
         ));
         releaseWriterLock();
+        System.out.println("Edge updated");
+        graph.edgeSet().forEach((e)->{
+            System.out.println("src "+e.getNodeDestUUID());
+            System.out.println("dest "+ e.getNodeSourceUUID());
+        });
+
+
     }
 
     @Override
@@ -132,6 +139,11 @@ public class FakeDB implements DBReader, DBWriter {
             graph.addVertex(n);
         });
         releaseWriterLock();
+        System.out.println("Nodes updated");
+        graph.vertexSet().forEach((e)->{
+            System.out.println(e.getNodeUUID());
+            System.out.println(e.getOwnerWallet());
+        });
 
     }
 

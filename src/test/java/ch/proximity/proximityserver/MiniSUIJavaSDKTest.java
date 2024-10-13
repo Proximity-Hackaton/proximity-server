@@ -12,12 +12,14 @@ public class MiniSUIJavaSDKTest {
         MiniSUIJavaSDK sui = new MiniSUIJavaSDK();
         try {
             List<JsonElement> elems = sui.queryEvents(
-                    "0xfd9a3688cf778f10b455d89cf5b60d00ac698722843f69460468c8b64eecbc31",
+                    "0x1f287b94919e183b17caff67e629b05257fc1517b6176c375c70d9f4cdbb6462",
                     "proximity",
-                    "NodeUpdateEvent",
+                    "NewUserEvent",
                     null, 100
             ).second();
-            System.out.println(elems.get(0));
+            for (JsonElement elem : elems){
+                System.out.println(elem);
+            }
         } catch (MiniSUIJavaSDK.SUIRequestException e) {
             throw new RuntimeException(e);
         }

@@ -88,7 +88,7 @@ public class MiniSUIJavaSDK {
             String eventSeq = nextCursor.get("eventSeq").getAsString();
             newPagingCursor = new PagingCursor(txDigest, eventSeq);
         }
-        return new Triple<>(pagingCursor, data.asList(), hasNextPage);
+        return new Triple<>(newPagingCursor, data.asList(), hasNextPage);
 
     }
 
