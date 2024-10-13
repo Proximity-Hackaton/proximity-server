@@ -97,7 +97,7 @@ public class TrustTransferNumberFunction implements TrustFunction{
                     origin,
                     edgeDeletedCount,
                     level,
-                    k
+                    level == 2 ? 1 : k
             );
             level++;
         }
